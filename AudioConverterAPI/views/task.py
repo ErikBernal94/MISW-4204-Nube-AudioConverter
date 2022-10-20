@@ -19,18 +19,19 @@ if not os.path.exists(UPLOAD_DIRECTORY):
 
 app = Flask(__name__)    
 
-class TaskView(Resource):
+class TasksIdView(Resource):
     @jwt_required()
     def get(self, taskId):
         return tasks_schema.dump(Tasks.query.get_or_404(taskId))
     
     @jwt_required()
     def put(self, taskId):
-        if request.json["newFormat"] not in ALLOWED_EXTENSIONS:
+        newFormat = request.args.get('newFormat')
+        if newFormat not in ALLOWED_EXTENSIONS:
             return "Invalid format", 409
         task = Tasks.query.get_or_404(taskId)
         task.status = "uploaded"
-        task.desiredformat=request.json["newFormat"]
+        task.desiredformat=newFormat
         db.session.commit()
         return tasks_schema.dump(task)
     
@@ -44,23 +45,35 @@ class TaskView(Resource):
 class TasksView(Resource):
     @jwt_required()
     def get(self):
+        argMax = int(request.args.get('max') or 0)
+        argOrder = int(request.args.get('order') or 0) #0 - asc, 1 - desc
+
         userId = get_jwt_identity()
-        tasks = Tasks.query.filter(Tasks.iduser == userId)
-        return [tasks_schema.dump(task) for task in tasks]
+        tasks = Tasks.query.filter(Tasks.iduser == userId).order_by(Tasks.id.desc() if argOrder == 1 else Tasks.id.asc())
+
+        returnTasks = [tasks_schema.dump(task) for task in tasks]
+
+        if(argMax > 0):
+            returnTasks = returnTasks[0:argMax]
+
+        return returnTasks
     
     @jwt_required()
     def post(self):
         userId = get_jwt_identity()
-        fileName = request.json["fileName"]
+
+        fileNewFormat = request.form["newFormat"]
+        fileName = request.files["file"].filename
         fileExtension = fileName.rsplit('.', 1)[1].lower()
-        if fileExtension not in ALLOWED_EXTENSIONS or request.json["newFormat"] not in ALLOWED_EXTENSIONS:
+        fileBytes = request.files["file"].read()
+
+        if fileExtension not in ALLOWED_EXTENSIONS or fileNewFormat not in ALLOWED_EXTENSIONS:
             return "Invalid format", 409
-        base64File = request.json["file"]
-        base64FileBytes = base64File.encode('utf-8')
-        decoded_data = base64.decodebytes(base64FileBytes)
+
         with open(os.path.join(UPLOAD_DIRECTORY, fileName), "wb") as fp:
-            fp.write(decoded_data)
-        task = Tasks(iduser= userId,filename = fileName,filelocation= UPLOAD_DIRECTORY, status = "uploaded", originalformat=fileExtension,desiredformat=request.json["newFormat"], uploadeddatetime = datetime.datetime.now())
+            fp.write(fileBytes)
+
+        task = Tasks(iduser= userId,filename = fileName,filelocation= UPLOAD_DIRECTORY, status = "uploaded", originalformat=fileExtension,desiredformat=fileNewFormat, uploadeddatetime = datetime.datetime.now())
         db.session.add(task)
         db.session.commit()
         return tasks_schema.dump(task)

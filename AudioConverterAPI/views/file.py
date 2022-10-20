@@ -15,7 +15,7 @@ from flask import Flask, send_from_directory
 
 app = Flask(__name__)
 
-class FileView(Resource):
+class FilesView(Resource):
     @jwt_required()
     def get(self, filename):
         task = Tasks.query.filter(Tasks.filename == filename).first()

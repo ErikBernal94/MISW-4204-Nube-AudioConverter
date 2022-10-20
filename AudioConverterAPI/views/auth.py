@@ -5,6 +5,7 @@ from flask_restful import Resource
 from sqlalchemy import or_
 from flask import Flask
 from models import db, Users, UsersSchema, TasksSchema
+import re
 
 users_schema = UsersSchema()
 tasks_schema = TasksSchema()
@@ -24,11 +25,16 @@ def loginUser(user, password):
         return None
     return existingUser
     
-class SignInView(Resource):
+class SignUpView(Resource):
 
     def post(self):
         if(request.json["password1"] != request.json["password2"]):
             return "The passwords do not match", 409
+
+        tmpPass = request.json["password1"];
+        if(len(tmpPass)< 6 or len(re.findall("\d", tmpPass)) < 1 or len(re.findall("[a-zA-Z]", tmpPass)) < 1):
+            return "Password requires minimum 6 characters including at least one letter and one number", 409
+
         newUser = Users(username=request.json["username"], password=request.json["password1"], mail=request.json["mail"])
         existingUser = getExistingUser(request.json["username"], request.json["mail"])
         if existingUser is None:            
