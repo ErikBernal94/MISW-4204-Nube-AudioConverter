@@ -1,0 +1,5 @@
+# Files folder
+api_uploaded_files/
+
+# Other files
+.DS_Store
