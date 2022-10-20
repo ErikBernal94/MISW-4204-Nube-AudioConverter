@@ -60,7 +60,6 @@ class TasksView(Resource):
         decoded_data = base64.decodebytes(base64FileBytes)
         with open(os.path.join(UPLOAD_DIRECTORY, fileName), "wb") as fp:
             fp.write(decoded_data)
-        sendMail("z.rey@uniandes.edu.co","ejemplo","Prueba",decoded_data, fileName, fileExtension)
         task = Tasks(iduser= userId,filename = fileName,filelocation= UPLOAD_DIRECTORY, status = "uploaded", originalformat=fileExtension,desiredformat=request.json["newFormat"], uploadeddatetime = datetime.datetime.now())
         db.session.add(task)
         db.session.commit()
