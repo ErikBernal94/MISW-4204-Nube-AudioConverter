@@ -1,10 +1,12 @@
+from fileinput import filename
+import json
 import os, datetime, base64
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import Flask
 from helpers.mail import sendMail
-
+from converter import convertFile, comprimir
 from models import db, Users, Tasks, UsersSchema, TasksSchema
 
 users_schema = UsersSchema()
@@ -13,6 +15,7 @@ tasks_schema = TasksSchema()
 
 UPLOAD_DIRECTORY = "../api_uploaded_files"
 ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma', 'm4a'}
+MESSAGE_DEFAULT = "Hello!!! this is your new converted file, thanks for use this app! "
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
@@ -61,12 +64,11 @@ class TasksView(Resource):
     @jwt_required()
     def post(self):
         userId = get_jwt_identity()
-
+        user = Users.query.get_or_404(userId)
         fileNewFormat = request.form["newFormat"]
         fileName = request.files["file"].filename
         fileExtension = fileName.rsplit('.', 1)[1].lower()
         fileBytes = request.files["file"].read()
-
         if fileExtension not in ALLOWED_EXTENSIONS or fileNewFormat not in ALLOWED_EXTENSIONS:
             return "Invalid format", 409
 
@@ -76,5 +78,12 @@ class TasksView(Resource):
         task = Tasks(iduser= userId,filename = fileName,filelocation= UPLOAD_DIRECTORY, status = "uploaded", originalformat=fileExtension,desiredformat=fileNewFormat, uploadeddatetime = datetime.datetime.now())
         db.session.add(task)
         db.session.commit()
+
+        data = fileBytes
+        base64EncodedStr = base64.b64encode(data)
+        fileString =base64EncodedStr.decode('utf-8')
+
+        convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, fileString, fileName, fileExtension, fileNewFormat)
+
         return tasks_schema.dump(task)
     
