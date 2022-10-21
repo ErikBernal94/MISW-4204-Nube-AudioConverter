@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import Flask
 from helpers.mail import sendMail
-from converter import convertFile, comprimir
+from converter import convertFile
 from models import db, Users, Tasks, UsersSchema, TasksSchema
 
 users_schema = UsersSchema()
@@ -83,7 +83,7 @@ class TasksView(Resource):
         base64EncodedStr = base64.b64encode(data)
         fileString =base64EncodedStr.decode('utf-8')
 
-        convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, fileString, fileName, fileExtension, fileNewFormat)
+        convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, UPLOAD_DIRECTORY, fileName, fileExtension, fileNewFormat, task.id)
 
         return tasks_schema.dump(task)
     
