@@ -19,7 +19,7 @@ La aplicación está desarrollada en el lenguaje de programación python con el 
 
 Siga los siguientes pasos: <br>
 1. Clone el repositorio `git clone url`
-2. Desde su terminal, ubiquese en la carpeta del proyecto `AudioConverterAPI` ejecute:
+2. Desde su terminal, ubiquese en la carpeta del proyecto `AudioConverterAPI` y ejecute:
   * `python3 -m pip install --user virtualenv`
   * `python3 -m venv venv`
   * `source venv/bin/activate`
