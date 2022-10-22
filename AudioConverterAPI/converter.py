@@ -6,28 +6,38 @@ from datetime import datetime
 from models import db, Tasks
 from helpers.mail import sendMail
 from celery import Celery
-from flask import Flask, send_from_directory
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from pydub import AudioSegment
-app = Celery( 'tasks' , broker = 'redis://localhost:6379/0' )
+celery = Celery( 'tasks' , broker = 'redis://localhost:6379/0' )
 
+some_engine = create_engine('postgresql://postgres:admin@localhost:5432/AudioConverter')
 
-@app.task
+# create a configured "Session" class
+Session = sessionmaker(bind=some_engine)
+
+# create a Session
+session = Session()
+
+@celery.task
 def convertFile(receiver, subject, message, fileLocation, fileName, fileExtension, newFormat, taskId):
     print ('\n->Converting file : {}'.format(fileName))
     ## converting file to new format
     oldFileLocation = fileLocation + '/' + fileName
     given_audio = AudioSegment.from_file(oldFileLocation, format=fileExtension)
     ## new file name with new format
-    newFileLocation = fileLocation + "/" + fileName.rsplit('.', 1)[0].lower() + "." + newFormat                                           
+    newFileName = fileName.rsplit('.', 1)[0].lower() + "." + newFormat 
+    newFileLocation = fileLocation + "/" + newFileName                                         
     given_audio.export(newFileLocation, format=newFormat)
 
     ## getting file in order to send in the  email
     fileStream = open(newFileLocation,'rb')
     newFile = fileStream.read()
     fileStream.close()
-    # task = Tasks.query.get_or_404(taskId)
-    # task.status = 'processed'
-    # db.session.commit()
+    task = Tasks.query.get_or_404(taskId)
+    task.status = 'processed'
+    task.filename = newFileName
+    session.commit()
     ## enviar email
     sendMail(receiver, subject, message, newFile, fileName, fileExtension)
     print ('\n-> The file was processed and sent : {}'.format(fileName))

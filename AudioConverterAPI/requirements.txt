@@ -24,3 +24,4 @@ SQLAlchemy==1.4.15
 Werkzeug==2.0.1
 gunicorn==20.1.0
 psycopg2==2.9.4
+pydub==0.25.1
