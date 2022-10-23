@@ -27,6 +27,8 @@ Siga los siguientes pasos: <br>
 3. Inicie el servidor con `flask run`
 4. Modificar los servicios en postman con la ip y puerto correspondientes
 
+> **_NOTA:_** Adicional debe instalar postgres y ejecutar los [scripts](https://github.com/ErikBernal94/MISW-4204-Nube-AudioConverter/tree/main/Scripts) para la creación de la base de datos y tablas utilizadas por la aplicación para llevar registro de las tareas realizadas.
+
 ## 2. Servicios: configuración y documentación
 Puede obtener la colección con los servicios [aquí](https://github.com/ErikBernal94/MISW-4204-Nube-AudioConverter/tree/main/Documentation/PostmanCollections). Una vez descargado, puede dirigirse a su aplicación `Postman > File > Import > Cargar archivo JSON`.
 
@@ -61,4 +63,4 @@ Las principales características de la máquina virtual son:
 
 Se realizó la instalación de las aplicaciones y paquetes necesarios para utilizar el proyecto.
 
-Con el fin de facilitar la instalación y configuración de la máquina virtual, se ha dispuesto una imagen en formato `.ova` en el [sharepoint Uniandes](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_vegar1_uniandes_edu_co/EQm-IGTIYjFHk8nrJn0dBIUB980moc4LDVAZiPGGf3dyUg?e=o8pkz2). Una vez descargada puede abrir su aplicación `VirtualBox > File > Import appliance > Cargar archivo .ova`.
+Con el fin de facilitar la instalación y configuración de la máquina virtual, se ha dispuesto una imagen en formato `.ova` en el [sharepoint Uniandes](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_vegar1_uniandes_edu_co/EQm-IGTIYjFHk8nrJn0dBIUB980moc4LDVAZiPGGf3dyUg?e=o8pkz2). Una vez descargada puede abrir su aplicación `VirtualBox > File > Import appliance > Cargar archivo .ova`. (El usuario y contraseña es **miso**)
