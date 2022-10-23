@@ -34,7 +34,7 @@ def convertFile(receiver, subject, message, fileLocation, fileName, fileExtensio
     fileStream = open(newFileLocation,'rb')
     newFile = fileStream.read()
     fileStream.close()
-    task = Tasks.query.get_or_404(taskId)
+    task = session.query(Tasks).get(taskId)
     task.status = 'processed'
     task.filename = newFileName
     session.commit()
