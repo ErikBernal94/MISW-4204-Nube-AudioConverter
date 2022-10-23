@@ -37,6 +37,7 @@ def convertFile(receiver, subject, message, fileLocation, fileName, fileExtensio
     task = session.query(Tasks).get(taskId)
     task.status = 'processed'
     task.filename = newFileName
+    task.processeddatetime = datetime.datetime.now()
     session.commit()
     ## enviar email
     sendMail(receiver, subject, message, newFile, fileName, fileExtension)
