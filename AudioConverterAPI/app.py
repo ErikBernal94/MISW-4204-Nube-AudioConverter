@@ -16,19 +16,10 @@ PASSWORD ="admin"
 PUBLIC_IP_ADDRESS ="34.66.98.169"
 DBNAME ="postgres"
  
-# configuration
-# app.config["SECRET_KEY"] = "yoursecretkey"
-# app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql + mysqldb://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket =/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
-# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
-# postgres+psycopg2://<db_user>:<db_pass>@<public_ip>/<db_name>?host=/cloudsql/<cloud_sql_instance_name>
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@{}/{}'.format('postgres', PASSWORD, PUBLIC_IP_ADDRESS, DBNAME)
-# postgresql+pg8000://<db_user>:<db_pass>@/<db_name>
-        #                         ?unix_sock=<INSTANCE_UNIX_SOCKET>/.s.PGSQL.5432
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@{}/{}?unix_sock={}/.s.PGSQL.5432'.format('postgres', PASSWORD,PUBLIC_IP_ADDRESS, DBNAME, 'misw4204-desarrollo-nube:us-central1:audioconverter')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{}:{}@{}/{}??host=/cloudsql/{}'.format('postgres', PASSWORD,PUBLIC_IP_ADDRESS, DBNAME, 'misw4204-desarrollo-nube:us-central1:audioconverter')
 app_context = app.app_context()
 app_context.push()
