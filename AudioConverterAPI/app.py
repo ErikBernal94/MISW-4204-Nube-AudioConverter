@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 PASSWORD ="admin"
 PUBLIC_IP_ADDRESS ="34.66.98.169"
-DBNAME ="audioconverter"
+DBNAME ="postgres"
  
 # configuration
 # app.config["SECRET_KEY"] = "yoursecretkey"
