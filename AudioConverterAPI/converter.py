@@ -9,9 +9,13 @@ from celery import Celery
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pydub import AudioSegment
-celery = Celery( 'tasks' , broker = 'redis://localhost:6379/0' )
+celery = Celery( 'tasks' , broker = 'redis://:admin@34.121.79.85/0' )
 
-some_engine = create_engine('postgresql://postgres:admin@localhost:5432/AudioConverter')
+PASSWORD ="admin"
+PUBLIC_IP_ADDRESS ="34.66.98.169"
+DBNAME ="postgres"
+
+some_engine = create_engine('postgresql+psycopg2://{}:{}@{}/{}??host=/cloudsql/{}'.format('postgres', PASSWORD,PUBLIC_IP_ADDRESS, DBNAME, 'misw4204-desarrollo-nube:us-central1:audioconverter'))
 
 # create a configured "Session" class
 Session = sessionmaker(bind=some_engine)
