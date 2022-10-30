@@ -1,7 +1,6 @@
 from locust import HttpUser, task, between
 import requests
 import random
-token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NjUzOTE5OSwianRpIjoiM2JlYmYwN2EtYzdmYi00NTk2LWJiYzMtMjdlOTk5ZjNmMmVjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjY2NTM5MTk5LCJleHAiOjE2NjY1NDAwOTl9.6RKA7npMqrpCdHRUmE_2ZtyVmCXs436TzZ52t1pWlZI'
 
 
 class ExampleTest(HttpUser):
@@ -9,6 +8,8 @@ class ExampleTest(HttpUser):
     # def home(self):
     #     self.client.request(method="GET", url="/home")
     wait_time = between(1, 3)
+    token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NjUzOTE5OSwianRpIjoiM2JlYmYwN2EtYzdmYi00NTk2LWJiYzMtMjdlOTk5ZjNmMmVjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjY2NTM5MTk5LCJleHAiOjE2NjY1NDAwOTl9.6RKA7npMqrpCdHRUmE_2ZtyVmCXs436TzZ52t1pWlZI'
+
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
         self.login()
@@ -18,9 +19,11 @@ class ExampleTest(HttpUser):
         post_data = {'username':'admin', 'password':'admin2022'}
         response = self.client.post('http://127.0.0.1:5000/api/auth/login', post_data, catch_response=True)
         print('respondio')
-        print(response.content)
-        token = response.content.token
-            
+        data= response.json()
+        print(data)
+        token = data['token']
+        # token = response.content.token
+
     @task
     def submit(self):
         print('entro al testtt')
