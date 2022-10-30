@@ -18,8 +18,8 @@ class ExampleTest(HttpUser):
         post_data = {'username':'admin', 'password':'admin2022'}
         response = self.client.post('http://127.0.0.1:5000/api/auth/login', post_data, catch_response=True)
         print('respondio')
-        print(response.body)
-        token = response.body.token
+        print(response.content)
+        token = response.content.token
             
     @task
     def submit(self):
