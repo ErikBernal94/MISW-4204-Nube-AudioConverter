@@ -6,24 +6,8 @@ token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NzE
 
 
 class ExampleTest(HttpUser):
-    # @task
-    # def home(self):
-    #     self.client.request(method="GET", url="/home")
-    wait_time = between(1, 3)
-
-    # def on_start(self):
-    #     """ on_start is called when a Locust start before any task is scheduled """
-    #     # self.login()
-
-    # def login(self):
-    #     print('entro al login')
-    #     post_data = {'username':'admin', 'password':'admin2022'}
-    #     response = self.client.post('http://127.0.0.1:5000/api/auth/login', post_data, catch_response=True)
-    #     print('respondio')
-    #     response = conn.getresponse()
-    #     print(data)
-    #     token = data['token']
-    #     # token = response.content.token
+    
+    wait_time = between(1, 10)
 
     @task
     def submit(self):
