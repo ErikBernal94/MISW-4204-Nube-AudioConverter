@@ -6,8 +6,8 @@ token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NzE
 
 
 class ExampleTest(HttpUser):
-    
-    wait_time = between(1, 10)
+
+    # wait_time = between(1, 10)
 
     @task
     def submit(self):
