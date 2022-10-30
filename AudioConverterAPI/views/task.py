@@ -13,7 +13,7 @@ users_schema = UsersSchema()
 tasks_schema = TasksSchema()
 
 
-UPLOAD_DIRECTORY = "../api_uploaded_files"
+UPLOAD_DIRECTORY = "/nfs/home"
 ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma', 'm4a'}
 MESSAGE_DEFAULT = "Hello!!! this is your new converted file, thanks for use this app! "
 

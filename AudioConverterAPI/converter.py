@@ -9,7 +9,7 @@ from celery import Celery
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pydub import AudioSegment
-celery = Celery( 'tasks' , broker = 'redis://:admin@34.121.79.85/0' )
+celery = Celery( 'tasks' , broker = 'redis://:admin@10.128.0.6:/0' )
 
 PASSWORD ="admin"
 PUBLIC_IP_ADDRESS ="34.66.98.169"
