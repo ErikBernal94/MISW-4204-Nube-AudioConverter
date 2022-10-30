@@ -64,3 +64,88 @@ Las principales características de la máquina virtual son:
 Se realizó la instalación de las aplicaciones y paquetes necesarios para utilizar el proyecto.
 
 Con el fin de facilitar la instalación y configuración de la máquina virtual, se ha dispuesto una imagen en formato `.ova` en el [sharepoint Uniandes](https://uniandes-my.sharepoint.com/:u:/g/personal/ja_vegar1_uniandes_edu_co/EQm-IGTIYjFHk8nrJn0dBIUB980moc4LDVAZiPGGf3dyUg?e=o8pkz2). Una vez descargada puede abrir su aplicación `VirtualBox > File > Import appliance > Cargar archivo .ova`. (El usuario y contraseña es **miso**)
+
+# Migración a la nube pública 
+
+Como parte del proyecto se realiza una migración de la aplicación Convertidor de Audio a la nube pública, en este caso se usará como proveedor de servicios a Google Cloud platform
+
+## 1. Aprovisionamiento de insfraestructura en la nube
+
+Teniendo en cuenta la arquitectura planteada (https://github.com/ErikBernal94/MISW-4204-Nube-AudioConverter/wiki/Arquitectura-Nube-P%C3%BAblica), se deben aprovisionar 3 maquinas virtuales (Compute engine) y una base de datos en la nube (Cloud SQL) de la siguiente manera:
+
+### 1. AudioConverterWebServer (Compute Engine API)
+
+Es el punto de entrada a la aplicación, en esta maquina se despliega la API (AudioConverterAPI) usando flask y las librerias anteriormente mencionadas.
+
+#### Configuración de despliegue:
+
+- Serie: N1
+- Tipo de maquina: g1-small (Un nucleo compartido - Memoria de 1.7GB)
+- Almacenamiento: 10GB
+- Sistema operativo: Debian/Linux 
+
+#### Instalaciones adicionales requeridas
+
+- NGINX
+- nfs-common
+
+#### Configuraciones adicionales
+
+- Permitir acceso desde las reglas del firewall
+- Configurar NFS como cliente (https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-20-04-es)
+
+### 2. AudioConverterWorker (Compute Engine Procesamiento Asincrono Redis)
+
+En esta maquina se ejecuta el servicio asincrono (Redis), encargado de realizar la conversión de los archivos y enviar los correos electronicos hacuendo uso de un servicio SMTP de nube publica, en este caso Outlook SMTP
+
+#### Configuración de despliegue:
+
+- Serie: N1
+- Tipo de maquina : f1-micro (Un nucleo compartido - Memoria de 614MB ) 
+- Almacenamiento: 10GB
+- Sistema operativo: Debian/Linux 
+
+#### Instalaciones adicionales requeridas
+
+- NGINX
+- nfs-common
+- redis-server
+
+#### Configuraciones adicionales
+
+- Permitir acceso desde las reglas del firewall
+- Configurar NFS como cliente (https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-20-04-es)
+
+### 3. AudioConverterFileServer (Compute Engine Almacenamiento Archivos NFS)
+
+En esta maquina se almacenan los archivos enviados por el usuario, para posteriormente ser consultadosy procesados desde el worker
+
+#### Configuración de despliegue:
+
+- Serie: N1
+- Tipo de maquina : f1-micro (Un nucleo compartido - Memoria de 614MB ) 
+- Almacenamiento: 10GB
+- Sistema operativo: Debian/Linux 
+
+#### Instalaciones adicionales requeridas
+
+- nfs-kernel-server
+
+#### Configuraciones adicionales
+
+- Configurar NFS como host (https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-20-04-es)
+
+### 4. AudioConverter DB (Cloud SQL DB)
+
+Para la persistencia de datos, se usa una instancia de base de datos PostgreSQL en la nube.
+
+#### Configuración de despliegue:
+
+- vCPU : 2
+- Memoria: 8GB
+- Almacennamiento (SSD): 100GB 
+
+#### Configuraciones adicionales
+
+- Permitir acceso a las maquinas virtuales (AudioConverterWebServer y AudioConverterWebServer) en las reglas del firewall
+- Ejecutar scripts para creación de las tablas (https://github.com/ErikBernal94/MISW-4204-Nube-AudioConverter/blob/main/Scripts/2.%20create%20tables.sql)
