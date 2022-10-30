@@ -14,7 +14,7 @@ class ExampleTest(HttpUser):
         print('entro al testtt')
         headers = {"Authorization": "Bearer " + token}
         numberFile = random.randint(1, 30)
-        nameFile = 'voz'+'.mp3'
+        nameFile = 'Song'+numberFile+'.mp3'
         print(nameFile)
         myfile = {'file': (nameFile, open(nameFile, 'rb'),'application/octet-stream')}
         payload={
