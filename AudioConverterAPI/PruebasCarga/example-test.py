@@ -34,6 +34,6 @@ class ExampleTest(HttpUser):
         print(nameFile)
         myfile = {'file': (nameFile, open(nameFile, 'rb'),'application/octet-stream')}
         payload={
-            "newFormat": "m4a"
+            "newFormat": "wav"
         }
         r = self.client.post("http://35.222.194.77:5000/api/tasks",headers=headers, files=myfile ,data=payload, verify=False)
