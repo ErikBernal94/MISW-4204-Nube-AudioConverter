@@ -2,13 +2,12 @@ from locust import HttpUser, task, between
 import requests
 import random
 
-token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NzE1MjYyOSwianRpIjoiMGVjZmU2NzAtZTY3OS00NmUwLTgzY2UtOGZlNTRhZTkyYTVhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNjY3MTUyNjI5LCJleHAiOjE2NjcxNTM1Mjl9.4wkGh8u0daYtxD6TC3L2sBvWrFObVTtr4E18UHzTU7A'
+token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NzE1MzAwNywianRpIjoiNzAwMDFjZTMtMGRhNi00ZmIzLTkyYTItZmNlMDg1NTQwNzg0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNjY3MTUzMDA3LCJleHAiOjE2NjcxNTM5MDd9.rrDY6olr-PbAhWhvvOK4_8U0UwEKbuzw25mMAsMW6bc'
 
 
 class ExampleTest(HttpUser):
 
-    # wait_time = between(1, 10)
-
+    wait_time = between(1, 2)
     @task
     def submit(self):
         print('entro al testtt')
