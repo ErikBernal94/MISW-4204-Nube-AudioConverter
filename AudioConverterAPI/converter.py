@@ -1,7 +1,7 @@
 
 import base64
 import zipfile
-from datetime import datetime
+import datetime
 
 from models import db, Tasks
 from helpers.mail import sendMail
@@ -41,6 +41,7 @@ def convertFile(receiver, subject, message, fileLocation, fileName, fileExtensio
     task = session.query(Tasks).get(taskId)
     task.status = 'processed'
     task.filename = newFileName
+    task.processeddatetime = datetime.datetime.now()
     session.commit()
     ## enviar email
     sendMail(receiver, subject, message, newFile, fileName, fileExtension)
