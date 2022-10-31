@@ -88,6 +88,7 @@ Es el punto de entrada a la aplicación, en esta maquina se despliega la API (Au
 
 - NGINX
 - nfs-common
+- ffmpeg
 
 #### Configuraciones adicionales
 
@@ -110,6 +111,7 @@ En esta maquina se ejecuta el servicio asincrono (Redis), encargado de realizar 
 - NGINX
 - nfs-common
 - redis-server
+- ffmpeg
 
 #### Configuraciones adicionales
 
