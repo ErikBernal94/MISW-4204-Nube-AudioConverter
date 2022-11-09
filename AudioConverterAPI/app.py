@@ -13,7 +13,7 @@ app = Flask(__name__)
 # conexion a cloud
 
 PASSWORD ="admin"
-PUBLIC_IP_ADDRESS ="34.66.98.169"
+PUBLIC_IP_ADDRESS ="172.28.112.3"
 DBNAME ="postgres"
  
  
