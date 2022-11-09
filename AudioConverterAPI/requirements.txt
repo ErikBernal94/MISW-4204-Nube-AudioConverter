@@ -29,3 +29,4 @@ asn1crypto==1.5.1
 pg8000==1.29.3
 scramp==1.4.3
 redis==4.3.4
+wheel==0.38.3
