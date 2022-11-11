@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pydub import AudioSegment
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKey_GoogleCloud.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKeyGoogleCloud.json'
 STORAGE_CLASSES = ('STANDARD', 'NEARLINE', 'COLDLINE', 'ARCHIVE')
 
 class GCStorage:

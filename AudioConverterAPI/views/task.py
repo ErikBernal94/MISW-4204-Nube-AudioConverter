@@ -16,7 +16,7 @@ from .GCStorage import GCStorage
 users_schema = UsersSchema()
 tasks_schema = TasksSchema()
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKey_GoogleCloud.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKeyGoogleCloud.json'
 STORAGE_CLASSES = ('STANDARD', 'NEARLINE', 'COLDLINE', 'ARCHIVE')
 working_dir = pathlib.Path.cwd()
 downloads_folder = working_dir.joinpath('AudiosDownloaded')

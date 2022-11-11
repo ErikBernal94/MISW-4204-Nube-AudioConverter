@@ -16,7 +16,7 @@ import logging
 from flask import Flask, send_from_directory
 
 app = Flask(__name__)
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKey_GoogleCloud.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKeyGoogleCloud.json'
 STORAGE_CLASSES = ('STANDARD', 'NEARLINE', 'COLDLINE', 'ARCHIVE')
 bucket_name = 'miso-bucket-api-converter'
 downloads_folder = './audioConverterDownloaded'
