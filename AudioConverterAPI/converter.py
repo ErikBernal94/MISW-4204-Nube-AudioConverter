@@ -4,6 +4,7 @@ import zipfile
 import datetime
 import mimetypes
 import os
+import shutil
 import pathlib
 from google.cloud import storage
 from models import db, Tasks
@@ -64,6 +65,9 @@ def convertFile(receiver, subject, message, fileLocation, fileName, fileExtensio
     print ('\n->Converting file : {}'.format(fileName))
     bucket_name = 'miso-bucket-api-converter'
     downloads_folder = './audioConverterDownloaded'
+    
+    if not os.path.exists(downloads_folder):
+        os.makedirs(downloads_folder)
     # GET THE FILE FROM STORAGE
     storage_client = storage.Client()
     gcs = GCStorage(storage_client)
@@ -92,4 +96,5 @@ def convertFile(receiver, subject, message, fileLocation, fileName, fileExtensio
     session.commit()
     # enviar email
     sendMail(receiver, subject, message, newFile, fileName, fileExtension)
+    os.remove(newFileLocation)
     print ('\n-> The file was processed and sent : {}'.format(fileName))
