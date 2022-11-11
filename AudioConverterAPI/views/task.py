@@ -1,6 +1,9 @@
 from fileinput import filename
 import json
 import os, datetime, base64
+import pathlib
+import mimetypes
+from google.cloud import storage
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
@@ -8,19 +11,25 @@ from flask import Flask
 from helpers.mail import sendMail
 from converter import convertFile
 from models import db, Users, Tasks, UsersSchema, TasksSchema
+from .GCStorage import GCStorage
 
 users_schema = UsersSchema()
 tasks_schema = TasksSchema()
 
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKey_GoogleCloud.json'
+STORAGE_CLASSES = ('STANDARD', 'NEARLINE', 'COLDLINE', 'ARCHIVE')
+working_dir = pathlib.Path.cwd()
+downloads_folder = working_dir.joinpath('AudiosDownloaded')
+bucket_name = 'miso-bucket-api-converter'
 
-UPLOAD_DIRECTORY = "/nfs/home"
+UPLOAD_DIRECTORY = "./audioConverterDownloaded"
 ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma', 'm4a'}
 MESSAGE_DEFAULT = "Hello!!! this is your new converted file, thanks for use this app! "
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
 
-app = Flask(__name__)    
+app = Flask(__name__)
 
 class TasksIdView(Resource):
     @jwt_required()
@@ -72,18 +81,15 @@ class TasksView(Resource):
         if fileExtension not in ALLOWED_EXTENSIONS or fileNewFormat not in ALLOWED_EXTENSIONS:
             return "Invalid format", 409
 
-        with open(os.path.join(UPLOAD_DIRECTORY, fileName), "wb") as fp:
-            fp.write(fileBytes)
+        storage_client = storage.Client()
+        gcs = GCStorage(storage_client)
+        bucket_gcs = gcs.get_bucket(bucket_name)
+        gcs.upload_file(bucket_gcs, fileName, fileBytes)
 
-        task = Tasks(iduser= userId,filename = fileName,filelocation= UPLOAD_DIRECTORY, status = "uploaded", originalformat=fileExtension,desiredformat=fileNewFormat, uploadeddatetime = datetime.datetime.now())
+        task = Tasks(iduser= userId,filename = fileName,filelocation= bucket_name, status = "uploaded", originalformat=fileExtension,desiredformat=fileNewFormat, uploadeddatetime = datetime.datetime.now())
         db.session.add(task)
         db.session.commit()
-
-        data = fileBytes
-        base64EncodedStr = base64.b64encode(data)
-        fileString =base64EncodedStr.decode('utf-8')
-
         convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, UPLOAD_DIRECTORY, fileName, fileExtension, fileNewFormat, task.id)
 
-        return tasks_schema.dump(task)
+        return
     
