@@ -91,5 +91,5 @@ class TasksView(Resource):
         db.session.commit()
         convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, UPLOAD_DIRECTORY, fileName, fileExtension, fileNewFormat, task.id)
 
-        return
+        return tasks_schema.dump(task)
     
