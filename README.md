@@ -151,3 +151,56 @@ Para la persistencia de datos, se usa una instancia de base de datos PostgreSQL 
 
 - Permitir acceso a las maquinas virtuales (AudioConverterWebServer y AudioConverterWebServer) en las reglas del firewall
 - Ejecutar scripts para creación de las tablas (https://github.com/ErikBernal94/MISW-4204-Nube-AudioConverter/blob/main/Scripts/2.%20create%20tables.sql)
+
+## 2. Escalabilidad servidor web
+
+Como parte de la integración a la nube se propone una nueva arquitectura con el fin de aumentar la escalabilidad en la capa web. Arquitectura: https://github.com/ErikBernal94/MISW-4204-Nube-AudioConverter/files/9993946/Documento1.3.pdf
+
+### 1. Instance template web
+
+Se crea un template para que sea usado en escalamiento horizontal en los servidores web dentro de un grupo de instancias.
+
+#### Configuraciones
+
+- Serie: N1
+- Tipo de maquina : f1-micro (Un nucleo compartido - Memoria de 614MB ) 
+- Almacenamiento: 10GB
+- Sistema operativo: Debian/Linux 
+- Script de arranque:
+
+#! /bin/bash
+apt-get update 	
+apt-get -y install git
+apt-get -y install pip
+apt-get -y install ffmpeg
+apt-get -y install nginx
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+bash add-google-cloud-ops-agent-repo.sh --also-install -y
+systemctl status google-cloud-ops-agent"*"
+apt-get update
+git clone https://github.com/ErikBernal94/MISW-4204-Nube-AudioConverter.git
+cd MISW-4204-Nube-AudioConverter/AudioConverterAPI/
+git checkout realease/balanceador-storage
+sudo pip install -r requirements.txt
+gunicorn --bind 0.0.0.0:5000 wsgi:app
+
+- El script de arranque configura un agente en cada maquina virtual desplegada para activar el sistema de monitoreo.
+
+### 2. Instance group
+
+Como parte de la estrategia de escalamiento, se crea un grupo de instancias con las siguientes configuraciones:
+
+- Número mínimo de instancias 1
+- Número máximo de instancias 3
+- Tipo de métrica: Utilización de CPU
+- Utilización permitoda de CPU: 80% 
+- Periodo de arranque: 600s 
+
+### 3. Load Balancer
+
+Se configura un balanceador de carga como punto de entrada al grupo de instacias, el balanceador de carga incluye un health check.
+
+### 4. Cloud Storage
+
+### 5. Cloud Monitoring
+
