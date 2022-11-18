@@ -24,8 +24,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{}:{}@{}/{}??host
 app_context = app.app_context()
 app_context.push()
 
-db.init_app(app)
-db.create_all()
+# db.init_app(app)
+# db.create_all()
 
 cors = CORS(app)
 

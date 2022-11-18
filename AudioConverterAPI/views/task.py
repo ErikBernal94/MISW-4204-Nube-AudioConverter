@@ -10,7 +10,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import Flask
 from helpers.mail import sendMail
-from converter import convertFile
 from models import db, Users, Tasks, UsersSchema, TasksSchema
 from .GCStorage import GCStorage
 
@@ -102,7 +101,7 @@ class TasksView(Resource):
             "fileName": fileName,
             "fileExtension": fileExtension,
             "newFormat": fileNewFormat,
-            "taskId": task.id,
+            "taskId": "1",
         }
         data = data.encode('utf-8')
         future = publisher.publish(topic_path,data, **attributes)
@@ -111,4 +110,3 @@ class TasksView(Resource):
         # convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, UPLOAD_DIRECTORY, fileName, fileExtension, fileNewFormat, task.id)
 
         return tasks_schema.dump(task)
-
