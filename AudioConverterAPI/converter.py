@@ -68,57 +68,60 @@ subscription_path = 'projects/misw4204-desarrollo-nube/subscriptions/audio-conve
 def callback(message):
     print(f'Received message: {message}')
     print(f'data: {message.data}')
-    print(f'data: {message.attributes}')
-    props = message.attributes
-    fileName = props.fileName
-    fileExtension = props.fileExtension
-    newFormat = props.newFormat
-    fileLocation = props.fileLocation
-    taskId = props.taskId
-    receiver = props.receiver
-    subject = props.subject
+    if message.attributes is None:
+        return
+    else:
+        print(f'data: {message.attributes}')
+        props = message.attributes
+        fileName = props.fileName
+        fileExtension = props.fileExtension
+        newFormat = props.newFormat
+        fileLocation = props.fileLocation
+        taskId = props.taskId
+        receiver = props.receiver
+        subject = props.subject
 
-    print ('\n->Converting file : {}'.format(fileName))
-    bucket_name = 'miso-bucket-api-converter'
-    downloads_folder = './audioConverterDownloaded'
-    
-    if not os.path.exists(downloads_folder):
-        os.makedirs(downloads_folder)
-    # GET THE FILE FROM STORAGE
-    storage_client = storage.Client()
-    gcs = GCStorage(storage_client)
-    bucket = gcs.get_bucket(bucket_name)
-    blob = bucket.blob(fileName)
-    path_download = downloads_folder+'/'+blob.name
-    blob.download_to_filename(str(path_download))
+        print ('\n->Converting file : {}'.format(fileName))
+        bucket_name = 'miso-bucket-api-converter'
+        downloads_folder = './audioConverterDownloaded'
+        
+        if not os.path.exists(downloads_folder):
+            os.makedirs(downloads_folder)
+        # GET THE FILE FROM STORAGE
+        storage_client = storage.Client()
+        gcs = GCStorage(storage_client)
+        bucket = gcs.get_bucket(bucket_name)
+        blob = bucket.blob(fileName)
+        path_download = downloads_folder+'/'+blob.name
+        blob.download_to_filename(str(path_download))
 
-    ## converting file to new format
-    given_audio = AudioSegment.from_file(path_download, format=fileExtension)
-    ## new file name with new format
-    newFileName = fileName.rsplit('.', 1)[0].lower() + "." + newFormat 
-    newFileLocation = fileLocation + "/" + newFileName                                         
-    given_audio.export(newFileLocation, format=newFormat)
+        ## converting file to new format
+        given_audio = AudioSegment.from_file(path_download, format=fileExtension)
+        ## new file name with new format
+        newFileName = fileName.rsplit('.', 1)[0].lower() + "." + newFormat 
+        newFileLocation = fileLocation + "/" + newFileName                                         
+        given_audio.export(newFileLocation, format=newFormat)
 
-    gcs.upload_file_from_path(bucket, newFileName, str(newFileLocation))
+        gcs.upload_file_from_path(bucket, newFileName, str(newFileLocation))
 
-    ## getting file in order to send in the  email
-    fileStream = open(newFileLocation,'rb')
-    newFile = fileStream.read()
-    fileStream.close()
-    task = session.query(Tasks).get(taskId)
-    task.status = 'processed'
-    task.filename = newFileName
-    task.processeddatetime = datetime.datetime.now()
-    session.commit()
-    # enviar email
-    sendMail(receiver, subject, message, newFile, fileName, fileExtension)
-    os.remove(newFileLocation)
-    print ('\n-> The file was processed and sent : {}'.format(fileName))
-    # if message.attributes:
-    #     print("Attributes:")
-    #     for key in message.attributes:
-    #         value = message.attributes.get(key)
-    #         print(f"{key}: {value}")
+        ## getting file in order to send in the  email
+        fileStream = open(newFileLocation,'rb')
+        newFile = fileStream.read()
+        fileStream.close()
+        task = session.query(Tasks).get(taskId)
+        task.status = 'processed'
+        task.filename = newFileName
+        task.processeddatetime = datetime.datetime.now()
+        session.commit()
+        # enviar email
+        sendMail(receiver, subject, message, newFile, fileName, fileExtension)
+        os.remove(newFileLocation)
+        print ('\n-> The file was processed and sent : {}'.format(fileName))
+        # if message.attributes:
+        #     print("Attributes:")
+        #     for key in message.attributes:
+        #         value = message.attributes.get(key)
+        #         print(f"{key}: {value}")
     message.ack()           
 
 
