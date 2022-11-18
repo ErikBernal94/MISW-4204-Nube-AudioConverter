@@ -4,6 +4,7 @@ import os, datetime, base64
 import pathlib
 import mimetypes
 from google.cloud import storage
+from google.cloud import pubsub_v1
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
@@ -25,6 +26,7 @@ bucket_name = 'miso-bucket-api-converter'
 UPLOAD_DIRECTORY = "./audioConverterDownloaded"
 ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma', 'm4a'}
 MESSAGE_DEFAULT = "Hello!!! this is your new converted file, thanks for use this app! "
+topic_path = 'projects/misw4204-desarrollo-nube/topics/audio-converter-pub-sub'
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
@@ -89,7 +91,24 @@ class TasksView(Resource):
         task = Tasks(iduser= userId,filename = fileName,filelocation= bucket_name, status = "uploaded", originalformat=fileExtension,desiredformat=fileNewFormat, uploadeddatetime = datetime.datetime.now())
         db.session.add(task)
         db.session.commit()
-        convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, UPLOAD_DIRECTORY, fileName, fileExtension, fileNewFormat, task.id)
+
+        publisher = pubsub_v1.PublisherClient()
+        data= fileName
+        attributes = {
+            "receiver":user.mail,
+            "subject": 'Audio Converter',
+            "message": MESSAGE_DEFAULT,
+            "fileLocation": UPLOAD_DIRECTORY,
+            "fileName": fileName,
+            "fileExtension": fileExtension,
+            "newFormat": fileNewFormat,
+            "taskId": task.id,
+        }
+        data = data.encode('utf-8')
+        future = publisher.publish(topic_path,data, **attributes)
+        print(future.result())
+
+        # convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, UPLOAD_DIRECTORY, fileName, fileExtension, fileNewFormat, task.id)
 
         return tasks_schema.dump(task)
-    
+
