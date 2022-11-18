@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "misw4204-desarrollo-nube",
+  "private_key_id": "25bd6848ba8aaef5547d0efebdcd46aa85c11a43",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDZHypqaQ6hv6Sr\n1BzJJV4OGFd1ypyuBxw7j/QjYyLxVxLWFoVwpi3rOiAoOLkfr7RwUJPIE0wBoJ1b\nFuJ/ZGakTAYuC1uXCefKuSMw7iTi6OuOHy4qSKZjIuTMk4jAkwVwD0LEEfxHZrvm\nHk3sRdETSKTn32H2LA7gmO4cIgQnQepfZJI1dkLyBP6EkW4xwloVKFOfejz7OSq1\nAdYz6NUb7TY8F+y5YzG2bpe/utwLPeXVVcs+P1droH93KhLiKGpTVhBx0i8laJaI\noukmJiGY3EB/pBu+JHzyBM823MR+/dBRSjdOT7F9Fu9BdMJsz2joMWa2SAxoNS3Q\ng0BI4WyxAgMBAAECggEAJlUoxWmv4iG2HnoP7PlSbjWg91RirhzmQKPNLBQ8HpTL\naA3I2FcWg1GbTM6a7Hu2ZR/sv2WcxSrIrUTQj0I4FuivLKDntjZS/IkMK/7Xd1I9\nCDX8Dg4OhjEqaO3hNnKegqbHGFu+iRKbuOh/xGedHoT0TFW1c2Na6w9E9qWQyyc2\nREIx52wXmKXB2aSzDwuFMORXcnmsNnKEQjaiRsIKaIHo6kcyFlDK4UTLIF8EQip6\n1q0J48jL2ZaayMa1bANA4l/X9ywOn934YZbFJLUNVK+Ld2TDTd/4kFfkG4kYbTbV\n/bEld+lEkbQ9tUEIAyN89NBkQ9nXaMgET3m3Y6F7OwKBgQDyh/8OL1Wby8+kip7Y\nVrELdUOtJ00jMabQUfB8AzZI01ERukBLwycrjsNj3DIMp8N4ZX4EEFxRPrpdTAGE\ngivsebV1JOxO6UAMPy2Tmq1WoXCRh9/jMt4+1QyLbSYUPUD3yPmnAWMrgUA6muWn\n1JrvzdG6ieAc81AO08ptye9LrwKBgQDlLe3es5yQnAGiQCkycRBZu7+EQb7V4eSw\nBIHFVYSUQjsXjHiU7Owi9e1qLjQzSoEvyA8UH6f63zfgwgqmRr+jcCPpkWtW/m1H\nHQnguV3G7zcFpRF/+73uMJtfgzIua0h2auKWLzzZdn5+iyElivOzCACIRRhsL1W8\nh7N1umkFnwKBgF1Q9lH+5HGNeddVfsi+kmBWPjPha0yfTg/Zdy5ADiL3K7omb5a2\n/9tCkutZTeiQpCUu582ofdzExfAfznWtoDjcm3T3P/UcygfsRx0D5q3ub+GO5hYE\n/H4weyMqW/xtlRHBwkz/u6iBkrT55GMu6m5aQtgDNLfu5l7OHpUfnXMBAoGASule\nbYMsVCCKcCykyrYmcA5spaCP7n2uMNLoUEaJ1aRoiGQELjnbXfohJqn/qhxaafHs\n69kFIX3BWBhVPtC1Z4kKVBiSi5cSxUH6rpgozRP4WkIAnGL/TFJbFzddOcsbnomF\nky3RqAuRgW+c4BaxXf3pnqFnQEWgssVwpbTPC2UCgYEA07SJSNSwP5OPkMMXfq2e\nWi/ne+jscaBLKdKznI8Y1SRG7MJuRsh4Zuz/OscJhNiN/bwCBngQmI3JbYj5v17L\n1aGKPqFP2eN79Ntlb2wv6v0qDxTF5h7ceCD6aha5f5iaGLPVp5vGuuKmL/2eX0MX\nhXCUfJKlvAD7CHw2x0sWuoQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloudstorage@misw4204-desarrollo-nube.iam.gserviceaccount.com",
+  "client_id": "108509181454621158766",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudstorage%40misw4204-desarrollo-nube.iam.gserviceaccount.com"
+}
