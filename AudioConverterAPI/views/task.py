@@ -3,6 +3,7 @@ import json
 import os, datetime, base64
 import pathlib
 import mimetypes
+import threading
 from google.cloud import storage
 from google.cloud import pubsub_v1
 from flask import request
@@ -71,6 +72,18 @@ class TasksView(Resource):
 
         return returnTasks
      
+    def sendFile(self, fileName, fileBytes): 
+        """
+        background Process handled by Threads
+        :return: None
+        """
+        print("Started Task ...")
+        print(threading.current_thread().name)
+        storage_client = storage.Client()
+        gcs = GCStorage(storage_client)
+        bucket_gcs = gcs.get_bucket(bucket_name)
+        gcs.upload_file(bucket_gcs, fileName, fileBytes)
+        print("completed .....")
 
     @jwt_required()
     def post(self):
@@ -82,11 +95,10 @@ class TasksView(Resource):
         fileBytes = request.files["file"].read()
         if fileExtension not in ALLOWED_EXTENSIONS or fileNewFormat not in ALLOWED_EXTENSIONS:
             return "Invalid format", 409
-        storage_client = storage.Client()
-        gcs = GCStorage(storage_client)
-        bucket_gcs = gcs.get_bucket(bucket_name)
-        gcs.upload_file(bucket_gcs, fileName, fileBytes)
-
+        print("envia primero task")
+        threading.Thread(target=self.sendFile, args=(fileName, fileBytes)).start()
+        print("envio el hilo y siguio")
+       
         task = Tasks(iduser= userId,filename = fileName,filelocation= bucket_name, status = "uploaded", originalformat=fileExtension,desiredformat=fileNewFormat, uploadeddatetime = datetime.datetime.now())
         db.session.add(task)
         db.session.commit()
@@ -94,19 +106,18 @@ class TasksView(Resource):
         publisher = pubsub_v1.PublisherClient()
         data= fileName
         attributes = {
-            "receiver":user.mail,
+            "receiver": user.mail,
             "subject": 'Audio Converter',
             "message": MESSAGE_DEFAULT,
             "fileLocation": UPLOAD_DIRECTORY,
             "fileName": fileName,
             "fileExtension": fileExtension,
             "newFormat": fileNewFormat,
-            "taskId": "1",
+            "taskId": str(task.id),
         }
         data = data.encode('utf-8')
         future = publisher.publish(topic_path,data, **attributes)
+        print("termino")
         print(future.result())
-
-        # convertFile.delay(user.mail, 'Audio Converter', MESSAGE_DEFAULT, UPLOAD_DIRECTORY, fileName, fileExtension, fileNewFormat, task.id)
 
         return tasks_schema.dump(task)

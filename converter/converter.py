@@ -107,7 +107,7 @@ def callback(message):
     fileStream = open(newFileLocation,'rb')
     newFile = fileStream.read()
     fileStream.close()
-    task = session.query(Tasks).get(taskId)
+    task = session.query(Tasks).get(int(taskId))
     task.status = 'processed'
     task.filename = newFileName
     task.processeddatetime = datetime.datetime.now()
