@@ -19,4 +19,4 @@ class ExampleTest(HttpUser):
         payload={
             "newFormat": "wav"
         }
-        r = self.client.post("http://35.222.194.77:5000/api/tasks",headers=headers, files=myfile ,data=payload, verify=False)
+        r = self.client.post("http://35.206.74.89:5000/api/tasks",headers=headers, files=myfile ,data=payload, verify=False)
