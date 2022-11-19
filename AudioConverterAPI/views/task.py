@@ -3,7 +3,6 @@ import json
 import os, datetime, base64
 import pathlib
 import mimetypes
-import asyncio
 from google.cloud import storage
 from google.cloud import pubsub_v1
 from flask import request
@@ -71,13 +70,7 @@ class TasksView(Resource):
             returnTasks = returnTasks[0:argMax]
 
         return returnTasks
-    
-    async def sendFile(self,fileName,fileBytes):
-        storage_client = storage.Client()
-        gcs = GCStorage(storage_client)
-        bucket_gcs = gcs.get_bucket(bucket_name)
-        gcs.upload_file(bucket_gcs, fileName, fileBytes)
-        return
+     
 
     @jwt_required()
     def post(self):
@@ -89,9 +82,10 @@ class TasksView(Resource):
         fileBytes = request.files["file"].read()
         if fileExtension not in ALLOWED_EXTENSIONS or fileNewFormat not in ALLOWED_EXTENSIONS:
             return "Invalid format", 409
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(self.sendFile(fileName,fileBytes))
-        loop.close()
+        storage_client = storage.Client()
+        gcs = GCStorage(storage_client)
+        bucket_gcs = gcs.get_bucket(bucket_name)
+        gcs.upload_file(bucket_gcs, fileName, fileBytes)
 
         task = Tasks(iduser= userId,filename = fileName,filelocation= bucket_name, status = "uploaded", originalformat=fileExtension,desiredformat=fileNewFormat, uploadeddatetime = datetime.datetime.now())
         db.session.add(task)
