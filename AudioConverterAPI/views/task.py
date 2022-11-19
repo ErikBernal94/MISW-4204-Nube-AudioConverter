@@ -72,7 +72,7 @@ class TasksView(Resource):
 
         return returnTasks
     
-    async def sendFile(fileName,fileBytes):
+    async def sendFile(self,fileName,fileBytes):
         storage_client = storage.Client()
         gcs = GCStorage(storage_client)
         bucket_gcs = gcs.get_bucket(bucket_name)
