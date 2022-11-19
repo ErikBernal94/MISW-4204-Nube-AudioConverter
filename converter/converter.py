@@ -113,7 +113,7 @@ def callback(message):
     task.processeddatetime = datetime.datetime.now()
     session.commit()
     # enviar email
-    sendMail(receiver, subject, message, newFile, fileName, fileExtension)
+    # sendMail(receiver, subject, message, newFile, fileName, fileExtension)
     os.remove(newFileLocation)
     print ('\n-> The file was processed and sent : {}'.format(fileName))
     message.ack()           
