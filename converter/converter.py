@@ -129,9 +129,9 @@ def callback(message):
 
 # streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
 # print(f'Listening for messages on {subscription_path}')
-
-while(1):
-    with subscriber:                                                # wrap subscriber in a 'with' block to automatically call close() when done
+with subscriber: 
+    while(1):
+        # wrap subscriber in a 'with' block to automatically call close() when done
         # try:
         #     # streaming_pull_future.result(timeout=timeout)
         #     streaming_pull_future.result()                          # going without a timeout will wait & block indefinitely
