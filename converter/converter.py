@@ -149,7 +149,7 @@ with subscriber:                                                # wrap subscribe
         ack_ids = []
         for received_message in response.received_messages:
             print(f"Received: {received_message.message.data}.")
-            callback(received_message)
+            callback(received_message.message)
             ack_ids.append(received_message.ack_id)
 
         # Acknowledges the received messages so they will not be sent again.
