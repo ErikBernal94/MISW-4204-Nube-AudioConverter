@@ -130,33 +130,33 @@ def callback(message):
 # streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
 # print(f'Listening for messages on {subscription_path}')
 
-
-with subscriber:                                                # wrap subscriber in a 'with' block to automatically call close() when done
-    # try:
-    #     # streaming_pull_future.result(timeout=timeout)
-    #     streaming_pull_future.result()                          # going without a timeout will wait & block indefinitely
-    # except TimeoutError:
-    #     streaming_pull_future.cancel()                          # trigger the shutdown
-    #     streaming_pull_future.result()                          # block until the shutdown is complete
-    # The subscriber pulls a specific number of messages. The actual
-    # number of messages pulled may be smaller than max_messages.
-    response = subscriber.pull(
-        request={"subscription": subscription_path, "max_messages": 20},
-        retry=retry.Retry(deadline=300),
-    )
-
-    if len(response.received_messages) != 0:
-        ack_ids = []
-        for received_message in response.received_messages:
-            print(f"Received: {received_message.message.data}.")
-            callback(received_message.message)
-            ack_ids.append(received_message.ack_id)
-
-        # Acknowledges the received messages so they will not be sent again.
-        subscriber.acknowledge(
-            request={"subscription": subscription_path, "ack_ids": ack_ids}
+while(1):
+    with subscriber:                                                # wrap subscriber in a 'with' block to automatically call close() when done
+        # try:
+        #     # streaming_pull_future.result(timeout=timeout)
+        #     streaming_pull_future.result()                          # going without a timeout will wait & block indefinitely
+        # except TimeoutError:
+        #     streaming_pull_future.cancel()                          # trigger the shutdown
+        #     streaming_pull_future.result()                          # block until the shutdown is complete
+        # The subscriber pulls a specific number of messages. The actual
+        # number of messages pulled may be smaller than max_messages.
+        response = subscriber.pull(
+            request={"subscription": subscription_path, "max_messages": 20},
+            retry=retry.Retry(deadline=300),
         )
 
-        print(
-            f"Received and acknowledged {len(response.received_messages)} messages from {subscription_path}."
-        )
+        if len(response.received_messages) != 0:
+            ack_ids = []
+            for received_message in response.received_messages:
+                print(f"Received: {received_message.message.data}.")
+                callback(received_message.message)
+                ack_ids.append(received_message.ack_id)
+
+            # Acknowledges the received messages so they will not be sent again.
+            subscriber.acknowledge(
+                request={"subscription": subscription_path, "ack_ids": ack_ids}
+            )
+
+            print(
+                f"Received and acknowledged {len(response.received_messages)} messages from {subscription_path}."
+            )
