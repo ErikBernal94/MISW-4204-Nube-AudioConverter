@@ -16,5 +16,12 @@ runtime: python
 env: flex
 service: default
 
+readiness_check:
+  check_interval_sec: 120
+  timeout_sec: 40
+  failure_threshold: 5
+  success_threshold: 5
+  app_start_timeout_sec: 500000
+
 runtime_config:
   python_version: 3
