@@ -25,7 +25,7 @@ psycopg2-binary==2.9.5
 pydub==0.25.1
 asn1crypto==1.5.1 
 pg8000==1.26.0
-scramp==1.4.3
+scramp==1.4.1
 wheel==0.38.3
 google-cloud-storage==2.6.0
 google-cloud-pubsub==2.13.11
