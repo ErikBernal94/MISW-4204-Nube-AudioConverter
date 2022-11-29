@@ -50,9 +50,9 @@ class GCStorage:
         return self.client.list_blobs(bucket_name)
 
 PASSWORD ="admin"
-PUBLIC_IP_ADDRESS ="172.28.112.3"
+PUBLIC_IP_ADDRESS ="10.34.48.2"
 DBNAME ="postgres"
-some_engine = create_engine('postgresql+psycopg2://{}:{}@{}/{}??host=/cloudsql/{}'.format('postgres', PASSWORD,PUBLIC_IP_ADDRESS, DBNAME, 'misw4204-desarrollo-nube:us-central1:audioconverter'))
+some_engine = create_engine('postgresql+psycopg2://{}:{}@{}/{}??host=/cloudsql/{}'.format('postgres', PASSWORD,PUBLIC_IP_ADDRESS, DBNAME, 'misw4204-desarrollo-nube-app:us-central1:audioconverter'))
 
 # create a configured "Session" class
 Session = sessionmaker(bind=some_engine)
@@ -63,7 +63,7 @@ session = Session()
 timeout = 5.0 # timeout in seconds
 
 subscriber = pubsub_v1.SubscriberClient()
-subscription_path = 'projects/misw4204-desarrollo-nube/subscriptions/audio-converter-pub-sub-sub'
+subscription_path = 'projects/misw4204-desarrollo-nube-app/subscriptions/audio-converter-pub-sub-sub'
 
 
 def callback(message):

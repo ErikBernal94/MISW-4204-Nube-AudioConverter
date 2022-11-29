@@ -26,7 +26,7 @@ bucket_name = 'miso-bucket-api-converter'
 UPLOAD_DIRECTORY = "./audioConverterDownloaded"
 ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma', 'm4a'}
 MESSAGE_DEFAULT = "Hello!!! this is your new converted file, thanks for use this app! "
-topic_path = 'projects/misw4204-desarrollo-nube/topics/audio-converter-pub-sub'
+topic_path = 'projects/misw4204-desarrollo-nube-app/topics/audio-converter-pub-sub'
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)

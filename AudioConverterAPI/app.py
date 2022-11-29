@@ -13,14 +13,14 @@ app = Flask(__name__)
 # conexion a cloud
 
 PASSWORD ="admin"
-PUBLIC_IP_ADDRESS ="172.28.112.3"
+PUBLIC_IP_ADDRESS ="10.34.48.2"
 DBNAME ="postgres"
  
  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{}:{}@{}/{}??host=/cloudsql/{}'.format('postgres', PASSWORD,PUBLIC_IP_ADDRESS, DBNAME, 'misw4204-desarrollo-nube:us-central1:audioconverter')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{}:{}@{}/{}??host=/cloudsql/{}'.format('postgres', PASSWORD,PUBLIC_IP_ADDRESS, DBNAME, 'misw4204-desarrollo-nube-app:us-central1:audioconverter')
 app_context = app.app_context()
 app_context.push()
 
