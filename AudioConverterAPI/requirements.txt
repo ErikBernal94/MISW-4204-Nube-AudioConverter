@@ -28,4 +28,4 @@ pg8000==1.26.0
 scramp==1.4.1
 wheel==0.37.1
 google-cloud-storage==2.0.0
-google-cloud-pubsub==2.13.11
+google-cloud-pubsub==2.13.0
