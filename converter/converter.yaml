@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: python
+runtime: custom
 env: flex
-entrypoint: python3 converter.py
 service: converter
-
-runtime_config:
-  python_version: 3
