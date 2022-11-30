@@ -17,7 +17,7 @@ ADD requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # Add the application source code.
-ADD .
+ADD . ./
 
 # Run a WSGI server to serve the application. gunicorn must be declared as
 # a dependency in requirements.txt.
