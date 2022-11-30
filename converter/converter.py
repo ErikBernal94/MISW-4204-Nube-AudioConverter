@@ -16,7 +16,7 @@ from google.cloud import pubsub_v1
 from concurrent.futures import TimeoutError
 from google.api_core import retry
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'ServiceKeyGoogleCloud.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/converter/ServiceKeyGoogleCloud.json'
 STORAGE_CLASSES = ('STANDARD', 'NEARLINE', 'COLDLINE', 'ARCHIVE')
 
 class GCStorage:
