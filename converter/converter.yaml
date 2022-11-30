@@ -18,4 +18,4 @@ entrypoint: python3 converter.py
 service: converter
 
 runtime_config:
-  python_version: 3.7
+  python_version: 3
