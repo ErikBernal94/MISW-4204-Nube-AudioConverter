@@ -13,9 +13,9 @@
 # limitations under the License.
 
 runtime: python
-env: flex
+env: standard
 entrypoint: python3 converter.py
 service: converter
 
 runtime_config:
-  python_version: 3
+  python_version: 3.7
