@@ -12,7 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: python37
-env: standard
+runtime: python
+env: flex
 entrypoint: gunicorn -b :$PORT app:app
 service: api
+
+runtime_config:
+  python_version: 3
+
+
